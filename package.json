@@ -1,0 +1,17 @@
+{
+  "name": "customers",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "npx nodemon src/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodeman": "^1.1.2",
+    "postmon": "^0.2.2",
+    "uuid": "^10.0.0"
+  }
+}
