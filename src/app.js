@@ -1,6 +1,13 @@
 const express = require("express");
 //Step 1: We are going to require mongoose after it has been install
 const mongoose = require("mongoose");
+
+// require dotenv to use the port, after dotenv has been install
+// const dotenv = require("dotenv");
+// dotenv.config();
+
+// require our new customer file that we createad
+const Customer = require('./models/customer');
 const app = express();
 mongoose.set('strictQuery', false);
 
@@ -8,7 +15,12 @@ mongoose.set('strictQuery', false);
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+if(process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
+
 const PORT = process.env.PORT || 5000;
+const CONNECTION = process.env.CONNECTION
 
 // JSON Destructure
 const customers = [
@@ -27,10 +39,16 @@ const customers = [
     }
 ];
 
+// Creating a customer and send it to the user
+const customer = new Customer({
+    name: 'Godwin',
+    industry: 'marketing'
+});
+
 app.get('/', (req, res) => {
     res.send('Welcome');
 });
-// Creating an end point, That's what happpen when the user visit that URL
+// Creating an API endpoints, That's what happpen when the user visit that URL
 app.get('/api/customers', (req, res) => {   // Get is to retrieve data
     res.send({"customers": customers});
 })
@@ -47,7 +65,7 @@ app.post('/', (req, res) => {  //Post is going to be used to add data.
 // Step 2: To use Mongoose we're going to define an async function
 const start = async() => {
     try{
-        await mongoose.connect('mongodb+srv://KEHINDE01:Harbiodun01@cluster0.r1nwvs8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');   // Here is where to pass the connection string
+        await mongoose.connect(CONNECTION);   // Here is where to pass the connection string
 
         app.listen(PORT, () => {
             console.log("App listening on port " + PORT);
