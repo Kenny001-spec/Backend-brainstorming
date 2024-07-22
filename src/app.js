@@ -1,6 +1,6 @@
 const express = require("express");
 //Step 1: We are going to require mongoose after it has been install
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 // require dotenv to use the port, after dotenv has been install
 // const dotenv = require("dotenv");
@@ -45,8 +45,10 @@ const customer = new Customer({
     industry: 'marketing'
 });
 
+customer.save();  // To save to the Data base.
+
 app.get('/', (req, res) => {
-    res.send('Welcome');
+    res.send(customer);
 });
 // Creating an API endpoints, That's what happpen when the user visit that URL
 app.get('/api/customers', (req, res) => {   // Get is to retrieve data
