@@ -1,6 +1,8 @@
-const express = require("express");
+const express = require('express');
+
 //Step 1: We are going to require mongoose after it has been install
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+
 
 // require dotenv to use the port, after dotenv has been install
 // const dotenv = require("dotenv");
@@ -8,6 +10,7 @@ const mongoose = require("mongoose");
 
 // require our new customer file that we createad
 const Customer = require("./models/customer");
+
 const app = express();
 mongoose.set("strictQuery", false);
 
@@ -45,7 +48,7 @@ const customer = new Customer({
 });
 
 app.get("/", (req, res) => {
-  res.send(customer);
+  res.send(welcome);
 });
 // Creating an API endpoints, That's what happpen when the user visit that URL
 app.get("/api/customers", async (req, res) => {
