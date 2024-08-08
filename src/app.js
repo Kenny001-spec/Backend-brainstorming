@@ -1,31 +1,17 @@
 const express = require('express');
-
-//Step 1: We are going to require mongoose after it has been install
 const mongoose = require('mongoose');
-
-
-// require dotenv to use the port, after dotenv has been install
-// const dotenv = require("dotenv");
-// dotenv.config();
-
-// require our new customer file that we createad
-const Customer = require("./models/customer");
+const Customer = require('./models/customer');
+require('dotenv').config(); // Ensure dotenv is loaded correctly
 
 const app = express();
 mongoose.set("strictQuery", false);
 
-// Adiing middle-ware which will be able to passed data through the body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
 
 const PORT = process.env.PORT || 5000;
 const CONNECTION = process.env.CONNECTION;
 
-// JSON Destructure
 const customers = [
   {
     name: "Hassan",
@@ -41,43 +27,46 @@ const customers = [
   },
 ];
 
-
-// Creating a customer and send it to the user
-const customer = new Customer({
-  name: "Godwin",
-  industry: "marketing",
-});
-
 app.get("/", (req, res) => {
-  res.send(welcome);
-});
-// Creating an API endpoints, That's what happpen when the user visit that URL
-app.get("/api/customers", async (req, res) => {
-  // Get is to retrieve data
-  const result = await Customer.find();
-  res.send({ customers: result });
+  res.send("Welcome to the API"); // Fixed response
 });
 
-app.post("/api/customers", (req, res) => {
-  console.log(req.body);
-  res.send(req.body);
+app.get("/api/customers", async (req, res) => {
+  try {
+    const result = await Customer.find();
+    res.json({ customers: result }); // Send JSON response
+  } catch (e) {
+    res.status(500).json({ error: e.message }); // Handle server error
+  }
+});
+
+app.post("/api/customers", async (req, res) => {
+  try {
+    console.log(req.body);
+    const customer = new Customer(req.body);
+    await customer.save(); // Wait for the customer to be saved
+    res.status(201).json({customer}); // Send response with created customer
+  } catch (e) {
+    res.status(400).json({ error: e.message }); // Handle client error
+  }
 });
 
 app.post("/", (req, res) => {
-  //Post is going to be used to add data.
   res.send("This is a post request");
 });
 
-// Step 2: To use Mongoose we're going to define an async function
 const start = async () => {
   try {
-    await mongoose.connect(CONNECTION); // Here is where to pass the connection string
-
+    await mongoose.connect(CONNECTION, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     app.listen(PORT, () => {
-      console.log("App listening on port " + PORT);
+      console.log(`App listening on port ${PORT}`);
     });
   } catch (err) {
-    console.log(err.message);
+    console.error('Failed to connect to MongoDB:', err.message);
   }
 };
-start(); // This is called invoke
+
+start();

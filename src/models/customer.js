@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 
 // Defining a model, and how to define a model is by creating a schema
 const customerSchema = new mongoose.Schema({   // customer schema is a new mongoose dot schema
-    name: String,
+    name: {
+        type: String,
+        required: true
+    },
     industry: String,
 
 });  
