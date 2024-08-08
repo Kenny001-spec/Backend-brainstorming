@@ -14,7 +14,7 @@ const Customer = require("./models/customer");
 const app = express();
 mongoose.set("strictQuery", false);
 
-// Adding middleware which will be able to passed data through the body
+// Adiing middle-ware which will be able to passed data through the body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -33,13 +33,14 @@ const customers = [
   },
   {
     name: "John",
-    industrty: "networking",
+    industry: "networking",
   },
   {
     name: "Godwin",
     industry: "sports medicine",
   },
 ];
+
 
 // Creating a customer and send it to the user
 const customer = new Customer({
